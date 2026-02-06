@@ -1,5 +1,6 @@
 ﻿🧬 Conway's Game of Life – React + TypeScript
 
+
 Eine moderne Web-Implementierung von John Conways berühmtem zellulären Automaten. Dieses Projekt nutzt React für das UI-Rendering und TypeScript für eine robuste, typsichere Logik.
 🚀 Features
 
