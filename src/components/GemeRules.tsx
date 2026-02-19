@@ -13,11 +13,9 @@ export const getNextGeneration = (grid: number[][]): number[][] => {
         for (let k = 0; k < cols; k++) {
             let neighbors = 0;
             operations.forEach(([x, y]) => {
-                const newI = i + x;
-                const newK = k + y;
-                if (newI >= 0 && newI < rows && newK >= 0 && newK < cols) {
-                    neighbors += grid[newI][newK];
-                }
+                const newI = (i + x + rows) % rows;
+                const newK = (k + y + cols) % cols;
+                neighbors += grid[newI][newK];
             });
 
             if (neighbors < 2 || neighbors > 3) {
