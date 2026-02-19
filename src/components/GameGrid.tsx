@@ -4,13 +4,14 @@ import { Controls } from './Controls';
 import { getNextGeneration } from './GemeRules';
 import { generateRandomGrid } from '../bin/generateRandomGrid';
 
-const numRows = 10;
-const numCols = 10;
+const numRows = 80;
+const numCols = 200;
 
 export const GameGrid = () => {
     const [grid, setGrid] = useState(() => Array(numRows).fill(0).map(() => Array(numCols).fill(0)));
     const [running, setRunning] = useState(false);
     const [speed, setSpeed] = useState(500);
+    const [generation, setGeneration] = useState(0);
 
     const runningRef = useRef(running);
     runningRef.current = running;
@@ -18,11 +19,13 @@ export const GameGrid = () => {
     const runSimulation = useCallback(() => {
         if (!runningRef.current) return;
         setGrid((currentGrid) => getNextGeneration(currentGrid));
+        setGeneration(g => g + 1);
         setTimeout(runSimulation, speed);
     }, [speed]);
 
     const randomize = () => {
         setGrid(generateRandomGrid(numRows, numCols));
+        setGeneration(0);
     };
 
     useEffect(() => {
@@ -30,7 +33,7 @@ export const GameGrid = () => {
     }, [running, runSimulation]);
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '10px' }}>
             <h2>Conway's Game of Life</h2>
             <p>Klicke auf die Quadrate, um Leben zu erschaffen, und starte die Simulation.</p>
             <Controls
@@ -38,12 +41,16 @@ export const GameGrid = () => {
                 setRunning={setRunning}
                 speed={speed}
                 setSpeed={setSpeed}
-                onClear={() => setGrid(Array(numRows).fill(0).map(() => Array(numCols).fill(0)))}
+                generation={generation}
+                onClear={() => {
+                    setGrid(Array(numRows).fill(0).map(() => Array(numCols).fill(0)));
+                    setGeneration(0);
+                }}
                 onRandom={randomize}
             />
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: `repeat(${numCols}, 20px)`
+                gridTemplateColumns: `repeat(${numCols}, 10px)`
             }}>
                 {grid.map((rows, i) =>
                     rows.map((col: any, k) => (
